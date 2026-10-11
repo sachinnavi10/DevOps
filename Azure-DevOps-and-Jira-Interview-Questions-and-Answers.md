@@ -105,72 +105,120 @@ A pipeline is a set of automatic steps that builds, tests, and releases an appli
 
 ## 7. How do you create a pipeline?
 
-1. Put the application code in a supported repository, such as Azure Repos Git or GitHub.
-2. In the Azure DevOps project, open **Pipelines** and choose **New pipeline**.
-3. Select the repository provider and authorize the connection if prompted.
-4. Select the repository and configure the pipeline. You can start with a suggested template or write an `azure-pipelines.yml` file.
-5. Define the trigger, agent pool, build steps, tests, and artifact publishing steps.
-6. Save the YAML file in the repository and run the pipeline.
-7. Review logs, fix failures, and verify that the expected artifact is produced.
-8. For deployment, add stages and environments, configure service connections and permissions, and use approvals or checks for sensitive environments.
+**Answer:** I can create a pipeline by following these steps:
 
-Keep credentials out of YAML and source code. Use protected variables, variable groups, or an appropriate secret store, and grant the pipeline only the permissions it needs.
+**Step 1: Create a project**
 
-## 8. How do you connect an Azure Repo to a pipeline?
+Sign in to Azure DevOps and create a new project.
 
-In Azure DevOps, create a pipeline from **Pipelines → New pipeline → Azure Repos Git**, then select the project repository. Azure DevOps can add a YAML pipeline file to that repo. Choose a template or provide your own YAML, commit it, and run the pipeline.
+**Step 2: Add source code**
 
-If the pipeline already exists, configure its repository in the pipeline settings and check its YAML path and branch. Make sure the build-service identity has permission to read the repository. For deployment to Azure resources, also configure an Azure service connection; connecting the code repository alone does not grant deployment access.
+Create or import a Git repository using Azure Repos, or connect a supported external repository.
+
+**Step 3: Create a pipeline**
+
+Open **Pipelines**, select **New pipeline**, and choose the repository and setup method.
+
+**Step 4: Configure YAML**
+
+Add the build, test, and release steps to an `azure-pipelines.yml` file.
+
+**Step 5: Run and monitor**
+
+Save the pipeline, run it, and check the logs and test results.
+
+A simple example for a Python project is:
+
+```yaml
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.12'
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: |
+      python -m pytest
+    displayName: 'Run tests'
+```
+
+This pipeline runs when changes are pushed to `main`, installs Python packages, and runs tests. It expects the repository to have a `requirements.txt` file and tests that can run with pytest.
+
+## 8. How do you connect Azure Repos to Azure Pipelines?
+
+**Answer:** Azure Repos and Azure Pipelines are both services in Azure DevOps and can be connected directly.
+
+**Steps:**
+
+1. Create a project in Azure DevOps.
+2. Open **Repos** and create or import a Git repository.
+3. Add your source code to the repository.
+4. Open **Pipelines → New pipeline**.
+5. Select **Azure Repos Git**.
+6. Choose your repository.
+7. Set up the pipeline using YAML or a template.
+8. Save and run the pipeline.
+9. Set a trigger so code changes start the pipeline automatically.
+
+**Example:** When a developer pushes code to the `main` branch, Azure Pipelines can build the application and run tests automatically.
+
+For releases to other services, you may also need service connections, permissions, and login details.
 
 ## 9. What are common DevOps interview questions and answers?
 
+Here are some important questions to prepare.
+
 ### Q1. What is DevOps?
 
-**Answer:** DevOps is a set of practices and a culture that brings development and operations teams together. It emphasizes automation, shared responsibility, continuous feedback, reliable releases, and improving the delivery lifecycle.
+DevOps brings development and operations teams together. They work as a team and use automation to release software more often and with fewer problems.
 
-### Q2. What is the difference between continuous integration, continuous delivery, and continuous deployment?
+### Q2. What is CI/CD?
 
-**Answer:** Continuous integration (CI) frequently merges changes and automatically builds and tests them. Continuous delivery keeps validated changes ready for release, typically with a human approval before production. Continuous deployment automatically releases every change that passes the defined checks.
+- **CI — Continuous Integration:** Regularly add code changes and automatically build and test them.
+- **CD — Continuous Delivery or Continuous Deployment:** Automatically prepare software for release or release it.
 
-### Q3. What is a CI/CD pipeline?
+With **Continuous Delivery**, a person usually approves the release to production. With **Continuous Deployment**, changes that pass the checks are released to production automatically.
 
-**Answer:** It is an automated sequence of steps that takes a code change through activities such as checkout, build, tests, security checks, packaging, artifact publishing, and deployment.
+### Q3. What is the difference between Git and GitHub?
 
-### Q4. What is an artifact?
+Git tracks changes to code. GitHub is a website that stores Git projects and helps people work together, review code, and share changes.
 
-**Answer:** An artifact is a versioned output of a build, such as a package, compiled application, container image, or deployment bundle. The same tested artifact should be promoted between environments rather than rebuilt differently for each one.
+### Q4. What is a Docker container?
+
+A Docker container runs an app with the files it needs. It helps the app work in a similar way on different computers.
 
 ### Q5. What is Infrastructure as Code (IaC)?
 
-**Answer:** IaC defines infrastructure in version-controlled files so it can be reviewed, tested, and provisioned consistently. Examples include Terraform, Bicep, and Azure Resource Manager templates.
+Infrastructure as Code means setting up things like servers and networks using files instead of doing every step by hand. Terraform and Azure Bicep are examples.
 
-### Q6. What is a container?
+### Q6. What is Jenkins?
 
-**Answer:** A container is an isolated process packaged with its application and required dependencies. It uses the host operating system's kernel, which makes it generally lighter than a virtual machine.
+Jenkins is a tool that can build, test, and release software automatically.
 
-### Q7. What is Docker?
+### Q7. What is Kubernetes?
 
-**Answer:** Docker is a platform and ecosystem for building, distributing, and running containers. A Dockerfile describes how to build an image; a container is a running instance of an image.
+Kubernetes is a tool for running and managing containers. It can start apps, add more copies when needed, and restart them if they stop working.
 
-### Q8. How do you investigate a failed deployment?
+### Q8. What is monitoring in DevOps?
 
-**Answer:** I would identify the failed stage and first failing step, inspect its logs and recent changes, and determine whether the failure is in the artifact, configuration, permissions, infrastructure, or application health. I would use a safe rollback or mitigation if necessary, then fix the cause and verify recovery.
+Monitoring checks whether an app and its systems are working well. It can show errors, speed, and availability. Azure Monitor and Prometheus are examples of monitoring tools.
 
-### Q9. How do you protect secrets in a pipeline?
+### Q9. What is a rollback?
 
-**Answer:** I would use a secret manager or protected pipeline variables, restrict access with least privilege, avoid printing secrets in logs, rotate credentials, and use short-lived identity-based authentication where supported.
+A rollback means returning to an earlier version that worked when a new release causes problems.
 
-### Q10. What is monitoring and why is it important?
+### Q10. What is the difference between Agile and DevOps?
 
-**Answer:** Monitoring collects metrics, logs, traces, and alerts to show system health and user impact. It helps teams detect issues, troubleshoot them, and verify that a release is operating correctly.
-
-### Q11. What is a rollback?
-
-**Answer:** A rollback restores a previously known-good application version or configuration when a release causes problems. The rollback method should be tested, and data changes may require a separate forward-fix or recovery plan.
-
-### Q12. What is a pull request?
-
-**Answer:** A pull request proposes changes for review and integration. It supports collaboration through code review and automated checks such as builds, tests, and policy validation.
+Agile focuses on building software in small steps, getting user feedback, and making changes. DevOps focuses on helping teams build, test, release, and run software together. Agile and DevOps can be used together.
 
 ## 10. What is the difference between Azure DevOps and GitOps?
 
@@ -188,58 +236,143 @@ A team can use Azure Repos and Azure Pipelines for CI and still use GitOps tooli
 
 **Advantages**
 
-- Faster, more repeatable delivery through automation.
-- Earlier feedback from builds, tests, and monitoring.
-- Better collaboration and shared ownership across development and operations.
-- More consistent environments when configuration and infrastructure are managed as code.
-- Faster incident recovery when deployments, observability, and rollback procedures are well designed.
+1. Faster software delivery through automation.
+2. Better teamwork between development and operations.
+3. Bugs can be found early through automatic testing.
+4. Releases can be more consistent.
+5. It is easier to grow and manage systems.
+6. Teams can get feedback and fix problems sooner.
 
-**Challenges**
+**Disadvantages**
 
-- Requires investment in culture, skills, tooling, and ongoing maintenance.
-- Poorly designed automation can spread mistakes quickly.
-- Pipelines, permissions, and infrastructure add complexity and need security controls.
-- Teams can over-focus on tool adoption instead of improving outcomes.
-- Continuous delivery does not remove the need for testing, governance, or operational readiness.
+1. The first setup can be difficult.
+2. Tools, computers, and training need time and money.
+3. A mistake in automation can spread quickly.
+4. Passwords and access must be kept safe.
+5. Pipelines need regular care and checks.
+6. Changes to the way a company works can take time.
 
-## 12. Will DevOps interview questions help me if I have a B.E. and 1–2 years of experience?
+**Interview answer:** DevOps helps teams release software faster and work better together. To do it well, teams need the right skills, safe ways to manage access, and regular care of their tools and pipelines.
 
-Yes. Preparing these questions can help you explain your knowledge clearly, but interviewers also look for practical examples and an honest account of what you personally did. A B.E. degree and 1–2 years of experience can be relevant; neither guarantees a role by itself.
+## 12. Will mentioning DevOps on my resume help me get a job with a B.E. degree and 1–2 years of experience?
 
-Be ready to describe a project end to end: the repository, branching or pull-request process, pipeline stages, tests, deployment environments, monitoring, a problem you solved, and what you learned. If you have only practiced a tool in a lab, say so rather than presenting it as production experience. Include DevOps skills on your resume only when you can explain and demonstrate them.
+**Answer:** Yes. DevOps skills can help you apply for suitable jobs, but your resume should only list skills and experience you really have.
+
+A B.E. degree in Computer Science or a related subject can give you a useful start. For jobs that ask for 1–2 years of experience, employers often want to know what tools and work processes you have used.
+
+For a junior DevOps job, learn about:
+
+- Linux and computer networks.
+- Git and GitHub.
+- Azure DevOps and YAML pipelines.
+- Docker and containers.
+- Cloud basics, such as Azure or AWS.
+- Writing simple scripts with Python or Bash.
+- Finding and fixing problems, and checking systems.
+
+**Important:** If you have 1–2 years of work experience, describe your real duties and results. If you have only practiced through lessons or personal projects, list those under skills or projects instead of calling them professional experience.
+
+**Beginner project idea:** Build a small Python app, store it in Git, use Azure Pipelines to run tests, package it with Docker, and explain the steps in your GitHub project.
 
 ## 13. What is the role and importance of DevOps in full-stack development?
 
-DevOps helps full-stack teams build, test, deploy, and operate both frontend and backend changes reliably. It can automate builds and tests, manage configuration and infrastructure, package applications, deploy services, and provide monitoring and feedback.
+**Answer:** DevOps helps full-stack developers build, test, release, and check both the frontend and backend of an app.
 
-For example, a pipeline might run frontend unit tests, backend tests, and security checks; build versioned artifacts or container images; deploy to a test environment; and promote the validated release after approval. DevOps practices help full-stack developers understand how their changes behave in production and work more effectively with operations and platform teams.
+For example, a web app might have a React frontend, a Python backend, and a database. DevOps can help by:
 
-## 14. What is the difference between Docker and a container? How do they help in DevOps?
+- Building the frontend and backend automatically.
+- Running tests before release.
+- Setting up development, test, and live environments.
+- Using Docker to package backend apps.
+- Releasing apps to cloud services.
+- Checking app errors and speed.
+- Keeping settings and passwords safe.
 
-**Docker** is a toolset and platform commonly used to create and run containers. A **container** is the isolated running application process. A Docker **image** is the packaged, read-only template from which containers are created.
+**Example workflow:**
 
-Containers help DevOps by packaging an application and its dependencies consistently across development, test, and production. They can make environments more reproducible and deployments easier to automate. Containers are not full virtual machines: they share the host kernel, so teams still need to manage image security, resource limits, networking, persistent data, and host security.
+```text
+Frontend: React / HTML / CSS
+Backend: Python / Node.js / Java
+Database: MySQL / PostgreSQL
+Git → CI/CD pipeline → Tests → Docker / Cloud release → Monitoring
+```
 
-## 15. What is the DevOps process, and what are typical Azure DevOps and GitOps architectures?
+DevOps reduces manual release work and helps teams release full-stack apps in a steady and reliable way.
 
-### Typical DevOps process
+## 14. What is the difference between Docker and a container, and how do they help in DevOps?
 
-1. **Plan:** Define and prioritize work in a backlog.
-2. **Code:** Make changes in version control and submit them for review.
-3. **Build and test:** Run CI builds, automated tests, and appropriate quality or security checks.
-4. **Package:** Publish a versioned artifact or container image.
-5. **Release and deploy:** Deploy the artifact through environments, using approvals and checks where appropriate.
-6. **Operate and observe:** Monitor health, logs, metrics, traces, and user impact.
-7. **Learn and improve:** Use feedback and incidents to improve the product, automation, and process.
+**Answer:** Docker is a set of tools for building and running containers. A container runs an app together with the files it needs.
 
-### Example Azure DevOps architecture
+| Docker | Container |
+|---|---|
+| Provides tools for working with containers. | Is a running app in an isolated environment. |
+| Builds images and starts containers. | Runs the app packaged in an image. |
+| Includes tools such as Docker Engine and Docker CLI. | Uses features of the operating system to keep apps separate. |
+| Helps package apps in a standard way. | Helps apps run in a similar way in different places. |
 
-**Developer → Azure Repos → Azure Pipelines CI → tests and quality checks → versioned artifact in Azure Artifacts or a container registry → deployment stage(s) → target environments → monitoring and feedback**
+**Example:** A developer packages a Python app and its libraries into a Docker image. They can start a container from that image on their computer or on a compatible server.
 
-Azure Boards can track work and link it to commits, pull requests, builds, and releases. Pipeline identities, service connections, permissions, and secrets should be configured securely.
+**How Docker helps in DevOps:**
 
-### Example GitOps architecture
+- Apps can run in a similar way during development and after release.
+- Docker can be used in automatic build and release pipelines.
+- Apps can be packaged and released more easily.
+- Apps are kept separate from each other.
+- Apps can be scaled using tools such as Kubernetes.
 
-**Developer → application source in Git → CI builds/tests and publishes an image → deployment configuration in a Git repository is updated → GitOps controller watches the repository → controller reconciles the target cluster to the declared state → monitoring and feedback**
+**Remember:** Docker is not the same as a container. Docker provides tools to build and manage containers.
 
-The Git repository records the desired deployment state. The controller detects drift and attempts to reconcile the environment. Changes are normally made through reviewed Git commits rather than manual edits to the live cluster. CI creates and validates artifacts; the GitOps controller handles continuous delivery and reconciliation.
+## 15. What is the DevOps process, how does it work, and what are the architectures of Azure DevOps and GitOps?
+
+**Answer:** The DevOps process is a continuous cycle of planning, coding, building, testing, releasing, deploying, running, and monitoring software.
+
+### A. General DevOps lifecycle
+
+**Plan**  
+Jira / Azure Boards
+
+**Code**  
+Git / Azure Repos
+
+**Build**  
+Azure Pipelines / Jenkins
+
+**Test**  
+Automated tests
+
+**Deploy**  
+Cloud / Containers
+
+**Monitor**  
+Logs / Metrics / Alerts
+
+Feedback from monitoring helps the team plan and develop the next changes.
+
+### B. Azure DevOps architecture
+
+Azure DevOps can coordinate work across these services:
+
+| Service or part | Purpose |
+|---|---|
+| **Azure Boards** | Planning and work tracking. |
+| **Azure Repos** | Source code and version control. |
+| **Azure Pipelines** | Automatic build, test, and release steps. |
+| **Deployment environment** | Runs the app in Azure, another cloud, on servers, or in Kubernetes. |
+| **Monitoring and feedback** | Logs, metrics, alerts, and new work items. |
+
+This is a simple view of how the services can work together, not a required order. Azure Artifacts can store packages, and Azure Test Plans can help manage tests.
+
+### C. GitOps architecture
+
+GitOps stores the wanted setup for an application or its infrastructure in Git. A GitOps tool keeps checking the running environment and compares it with the setup in Git.
+
+| Part | Purpose |
+|---|---|
+| **Developer / CI pipeline** | Builds and tests the application image. |
+| **Git repository** | Stores versioned setup files, often YAML files. |
+| **GitOps controller** | Argo CD or Flux checks Git and updates the environment to match. |
+| **Kubernetes cluster** | Runs the application using the setup in Git. |
+
+**Example:** A setup file says the application should have two copies running. A developer changes the number to three. The GitOps controller sees the change and works to make the cluster run three copies.
+
+**Key difference:** Azure DevOps can automate the overall software delivery process. GitOps focuses on keeping an environment in the state described in Git. Teams can use both together.
