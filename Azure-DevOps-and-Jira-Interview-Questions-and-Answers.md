@@ -6,46 +6,102 @@ This guide covers Agile work-tracking tools, Azure DevOps pipelines, GitOps, con
 
 ## 1. What is Azure Boards?
 
-Azure Boards is the work-tracking service in Azure DevOps. Teams use it to plan and track work with items such as epics, features, user stories, tasks, bugs, and issues. It provides backlogs, sprint planning, Kanban boards, queries, dashboards, and links between work items, code, and builds.
+**Answer:** Azure Boards is a work-tracking service within Microsoft Azure DevOps. It helps development teams plan, assign, track, and manage their work.
+
+**Key features:**
+
+- Work-item tracking
+- Agile boards and Kanban boards
+- Sprint planning and backlogs
+- Bug tracking
+- Progress monitoring through charts and dashboards
+
+**Example:** A developer receives a task to fix a login-page bug. The team creates a work item in Azure Boards, assigns it to the developer, and tracks its progress until completion.
 
 ## 2. What is Jira?
 
-Jira is Atlassian's work-management and issue-tracking product. Software teams commonly use Jira to plan sprints, manage backlogs, track bugs and other work, and visualize progress using boards and reports. Jira workflows, fields, issue types, and integrations can be configured for a team's process.
+**Answer:** Jira is a project management and issue-tracking tool developed by Atlassian. It is widely used by Agile teams to manage tasks, bugs, user stories, and sprints.
+
+**Key features:**
+
+- Scrum and Kanban boards
+- Sprint planning
+- Bug and issue tracking
+- Task assignment
+- Reports and project progress tracking
+
+**Example:** A Scrum team uses Jira to create user stories, assign tasks to developers, track bugs, and monitor sprint progress.
 
 ## 3. What is Trello?
 
-Trello is a visual work-management tool based on boards, lists, and cards. A list often represents a workflow stage, while a card represents a task or piece of work. It is simple to set up and works well for lightweight planning. Jira and Azure Boards provide more structured software-development planning and reporting features, though the right choice depends on the team's needs.
+**Answer:** Trello is a visual work-management and project-management tool developed by Atlassian. It helps teams organize tasks and track progress using boards, lists, and cards.
 
-## 4. What are a user story, spike, issue, bug, feature, and epic?
+**Key features of Trello:**
 
-These terms describe different kinds or sizes of work. Their exact definitions can vary by organization and tool.
+- **Boards:** Represent a project or workflow.
+- **Lists:** Represent stages of work, such as To Do, In Progress, and Done.
+- **Cards:** Represent individual tasks. Cards can have descriptions, due dates, checklists, and assignments.
+- **Collaboration:** Lets team members share updates and track progress.
 
-| Term | Meaning | Example |
+**Example:** A software development team creates a Trello board to manage a website project.
+
+## 4. What is the difference between an Epic, Feature, User Story, Spike, Issue, Task, and Bug?
+
+**Answer:** These terms describe different types of work items used in Agile project management. Their exact order can depend on the tool and the team's process.
+
+| Work item | Meaning | Example |
 |---|---|---|
-| **User story** | A small, user-focused requirement that describes a capability and its value. Often written as: “As a `<user>`, I want `<capability>` so that `<benefit>`.” | As a customer, I want to reset my password so that I can regain access to my account. |
-| **Spike** | A time-boxed investigation or experiment to reduce uncertainty. It should have a question to answer and a useful outcome, such as a recommendation or prototype. | Compare two deployment approaches and document the recommended option. |
-| **Issue** | A general work item. In Jira, “issue” is also the umbrella term for records such as stories, tasks, and bugs. In other teams, it may mean a problem or request. | Investigate a failed nightly deployment. |
-| **Bug** | A defect where the product does not behave as intended. | The password-reset link expires immediately instead of after the configured period. |
-| **Feature** | A larger capability that can be delivered through multiple stories or tasks. | Self-service account recovery. |
-| **Epic** | A broad objective or substantial body of work that is broken into features or stories. | Improve account security and recovery. |
+| **Epic** | A large business goal that can be split into smaller items. | Online shopping system |
+| **Feature** | A major ability or part of a product. | Online payment |
+| **User Story** | A requirement written from the user's point of view. | As a customer, I want to pay online. |
+| **Task** | A specific piece of work. | Connect the payment service. |
+| **Bug** | Something in the product that does not work as expected. | Payment fails after clicking Pay. |
+| **Spike** | A short, time-limited investigation to learn more before deciding what to do. | Research payment options. |
+| **Issue** | A general work item or problem. Its meaning depends on the tool and team. | Investigate a deployment failure. |
 
-A common hierarchy is **Epic → Feature → User story or Product Backlog Item → Task**. Bugs may be tracked at different levels depending on the team's process. A spike is usually a time-boxed work item linked to the question or feature it supports.
+A common hierarchy in Azure Boards is:
 
-## 5. What statuses can these items have on a work board?
+**Epic → Feature → User Story / Product Backlog Item → Task**
 
-There is no universal status list; administrators and teams configure workflows. A typical Kanban flow is:
+Bugs and spikes can be tracked at different levels, depending on the team's setup. Jira uses issue types that teams can configure, and commonly supports relationships such as **Epic → Story, Task, or Bug**.
 
-**New / To Do → Active / In Progress → Resolved / Done**
+## 5. What are the different statuses of work items in Azure Boards and Jira?
 
-Teams may also use **Approved**, **Committed**, **Blocked**, **In Review**, **Testing**, or **Removed**. For example, an Azure Boards team using the Agile process commonly sees states such as **New**, **Active**, **Resolved**, and **Closed** for user stories, while bugs and tasks can have their own state rules. A Scrum process can use different names, such as **To Do**, **Doing**, and **Done**.
+**Answer:** Statuses show the current stage of a work item. The available statuses depend on the workflow and project setup.
 
-Use the board's configured states and transition rules as the source of truth. Do not assume an item is complete just because it was moved to a column named “Testing” or “Resolved”; follow the team's definition of done.
+| Status | Meaning |
+|---|---|
+| **New / To Do** | Work has not started. |
+| **Active / In Progress** | Someone is working on it. |
+| **Resolved** | A solution has been made, or the item is waiting to be checked. The exact meaning depends on the workflow. |
+| **In Review** | The work is being reviewed. |
+| **Ready for Testing** | The work is ready for testing. |
+| **Closed / Done** | The work is considered complete. |
+| **Blocked** | Work cannot continue because of a problem or delay. |
+
+**Example workflow:**
+
+**New / To Do → Active / In Progress → In Review / Testing → Closed / Done**
+
+**Interview tip:** Not every board has the same statuses. Azure Boards can have different states for different types of work items. Jira workflows can also be changed to fit a team's needs.
 
 ## 6. What is Azure DevOps, and what are pipelines?
 
-Azure DevOps is Microsoft's suite of services for planning, source control, building, testing, and delivering software. Its services include Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts.
+**Answer:** Azure DevOps is a Microsoft platform that provides tools for planning, developing, testing, and delivering software.
 
-An **Azure Pipeline** automates steps in the software delivery process. A CI pipeline can build code and run tests when changes are pushed or a pull request is opened. A CD pipeline can publish an artifact and deploy it to one or more environments, with approvals or checks where needed.
+Its main services include:
+
+- **Azure Boards:** Plan and track work.
+- **Azure Repos:** Store and manage source code using Git.
+- **Azure Pipelines:** Build, test, and release applications automatically.
+- **Azure Test Plans:** Plan and run tests.
+- **Azure Artifacts:** Store and share software packages.
+
+**What is a pipeline?**
+
+A pipeline is a set of automatic steps that builds, tests, and releases an application.
+
+**Example:** When a developer adds code to a Git repository, a pipeline can build the application, run tests, and release it if it passes the required checks.
 
 ## 7. How do you create a pipeline?
 
