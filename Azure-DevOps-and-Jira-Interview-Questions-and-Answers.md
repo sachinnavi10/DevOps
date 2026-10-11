@@ -328,37 +328,35 @@ DevOps reduces manual release work and helps teams release full-stack apps in a 
 
 ### A. General DevOps lifecycle
 
-**Plan**  
-Jira / Azure Boards
-
-**Code**  
-Git / Azure Repos
-
-**Build**  
-Azure Pipelines / Jenkins
-
-**Test**  
-Automated tests
-
-**Deploy**  
-Cloud / Containers
-
-**Monitor**  
-Logs / Metrics / Alerts
-
-Feedback from monitoring helps the team plan and develop the next changes.
+```text
+Plan               → Code              → Build
+Jira / Azure Boards  Git / Azure Repos   Azure Pipelines / Jenkins
+                                           ↓
+Monitor            ← Deploy            ← Test
+Logs / Metrics       Cloud / Containers  Automated tests
+     └──────────── Feedback helps plan the next changes ────────────┘
+```
 
 ### B. Azure DevOps architecture
 
 Azure DevOps can coordinate work across these services:
 
-| Service or part | Purpose |
-|---|---|
-| **Azure Boards** | Planning and work tracking. |
-| **Azure Repos** | Source code and version control. |
-| **Azure Pipelines** | Automatic build, test, and release steps. |
-| **Deployment environment** | Runs the app in Azure, another cloud, on servers, or in Kubernetes. |
-| **Monitoring and feedback** | Logs, metrics, alerts, and new work items. |
+```text
+Azure Boards
+Planning and work tracking
+      ↓
+Azure Repos
+Source code and version control
+      ↓
+Azure Pipelines
+Build, test, and release automation
+      ↓
+Deployment environment
+Azure, other clouds, servers, or Kubernetes
+      ↓
+Monitoring and feedback
+Logs, metrics, alerts, and new work items
+```
 
 This is a simple view of how the services can work together, not a required order. Azure Artifacts can store packages, and Azure Test Plans can help manage tests.
 
@@ -366,12 +364,19 @@ This is a simple view of how the services can work together, not a required orde
 
 GitOps stores the wanted setup for an application or its infrastructure in Git. A GitOps tool keeps checking the running environment and compares it with the setup in Git.
 
-| Part | Purpose |
-|---|---|
-| **Developer / CI pipeline** | Builds and tests the application image. |
-| **Git repository** | Stores versioned setup files, often YAML files. |
-| **GitOps controller** | Argo CD or Flux checks Git and updates the environment to match. |
-| **Kubernetes cluster** | Runs the application using the setup in Git. |
+```text
+Developer / CI pipeline
+Build and test application image
+          ↓
+Git repository
+Versioned YAML and desired setup
+          ↓
+GitOps controller
+Argo CD or Flux checks Git and applies changes
+          ↓
+Kubernetes cluster
+Runs the application using the setup in Git
+```
 
 **Example:** A setup file says the application should have two copies running. A developer changes the number to three. The GitOps controller sees the change and works to make the cluster run three copies.
 
